@@ -1,54 +1,53 @@
-import matplotlib.pyplot as plt
-def LsitReg():
+import matplotlib.pyplot as plt #Import para las graficas
+def LsitReg(): #Definición en la cual se buscaran los nombres de la region, para luego filtrarlas al usuario
     with open("CasosNuevosSinSintomas.csv","r", encoding="utf-8") as f:
-        Regiones = []
-        for i in f.readlines():
+        Regiones = [] 
+        for i in f.readlines(): #Comenzara a leer cada linea encontrando las regiones.
             lista = i.split(",")
-            if lista[0] not in Regiones and lista[0]!= "Region" and lista[0] != "Total":
+            if lista[0] not in Regiones and lista[0]!= "Region" and lista[0] != "Total": #Si la lista se encuentra "region" y "total" estas serian ignoradas para asi solo printear las Regiones
                 Regiones.append(lista[0])
         print(Regiones)
 LsitReg()
 
-def DatosRegion(Region):
+def DatosRegion(Region): #Datos region funcionara como el que comienza la busca de los datos no acumulados.
     archivo = open("CasosNuevosSinSintomas.csv","r", encoding="utf-8")
-    FiDatos = []
-    for linea in archivo:
+    FiDatos = [] #Lista vacia en la cual se almacenan los datos.
+    for linea in archivo: #Comenzara desde el inicio de las regiones en las cuales se filtraran los datos.
         campos = linea.split(",") 
         if campos[0] == Region:
-            for contador in range(len(campos)-15,len(campos)-1):
+            for contador in range(len(campos)-15,len(campos)-1): #Aqui solo tomaremos los datos de las ultimas 2 semanas.
                 FiDatos.append(int(float(campos[contador])))
     archivo.close()
     return FiDatos
 
-def DatoRegionAcumulado(Region):
+def DatoRegionAcumulado(Region): #Definicion para los datos acumulados.
     archivo = open("CasosNuevosSinSintomas.csv","r", encoding="utf-8")
     DatosAcumulado= []
-    for linea in archivo:
+    for linea in archivo: #Se tomaran las lineas en el archivo
         campos = linea.split(",") 
         if campos[0] == Region:
-            Akum=0
-            for i in range(len(campos)-15,len(campos)-1):
-                Akum += int(float(campos[i]))
+            Akum=0 #Akum es el contador de los acumulados, el nombre puesto por falta de ideas.
+            for i in range(len(campos)-15,len(campos)-1): #Tal como el anterior se buscaran los datos de la ultimas 2 semanas
+                Akum += int(float(campos[i])) #Se convierten los datos para campos y luego asi se añaden a Akuma para sumarlos, luego de eso se dan los Casos acumulados.
                 DatosAcumulado.append(Akum)
     archivo.close()
     return DatosAcumulado
-                
+             
 flag = True
-while flag:
+while flag: #While para el inicio del menu, asi para que el usuario pueda buscar tranquilamente base algunas cuantas mecanicas.
     option = input("[1] Ingrese el nombre o numero de la region: \n")
-    if option == "1" or option == "Tarapacá":
-        
+    if option == "1" or option == "Tarapacá": #Se pueden poner numeros, como el da las regiones en este caso por si alguien no conoce el nombre
         print("Region de Tarapacá")
-        op = input("[1] Datos acumulativos \n" "[2] Datos no Acum \n" "ingrese: ") 
-        if op == "1":
+        op = input("[1] Datos acumulativos \n" "[2] Datos no Acumulativos \n" "ingrese: ") 
+        if op == "1": #Aqui comienza a mostrar el grafico.
             dias = ["1", "2", "3", "4" ,"5" ,"6" ,"7" ,"8" ,"9" ,"10" ,"11" ,"12", "13", "14"]
-            casos = DatoRegionAcumulado("Tarapacá")
+            casos = DatoRegionAcumulado("Tarapacá") #Para que funcione se llama a la funcion junto a la region cual nosotros ingresamos.
             colors = ["brown", "green", "red", "blue", "purple", "yellow", "pink", "grey", "brown", "green", "red", "blue", "purple", "yellow"]
             plt.title("Casos Covid Acumulativos Tarapaca 2021")
             plt.bar(dias, height=casos, color=colors)
             plt.show()
             print("Datos Acumulativos")
-        elif op == "2":
+        elif op == "2": #Mostrar grafico no acumulados.
             dias = ["1", "2", "3", "4" ,"5" ,"6" ,"7" ,"8" ,"9" ,"10" ,"11" ,"12", "13", "14"]
             casos = DatosRegion("Tarapacá")
             colors = ["brown", "green", "red", "blue", "purple", "yellow", "pink", "grey", "brown", "green", "red", "blue", "purple", "yellow"]
@@ -59,8 +58,8 @@ while flag:
 
     if option == "2" or option == "Antofagasta":
         print("Region de Antofagasta")
-        op = input("[1] Datos acumulativos \n" "[2] Datos no Acum \n" "ingrese: ") 
-        if op == "1":
+        epapa = input("[1] Datos acumulativos \n" "[2] Datos no Acum \n" "ingrese: ") 
+        if epapa == "1":
             dias = ["1", "2", "3", "4" ,"5" ,"6" ,"7" ,"8" ,"9" ,"10" ,"11" ,"12", "13", "14"]
             casos = DatoRegionAcumulado("Antofagasta")
             colors = ["brown", "green", "red", "blue", "purple", "yellow", "pink", "grey", "brown", "green", "red", "blue", "purple", "yellow"]
@@ -68,7 +67,7 @@ while flag:
             plt.bar(dias, height=casos, color=colors)
             plt.show()
             print("Datos Acumulativos")
-        elif op == "2":
+        elif epapa == "2":
             dias = ["1", "2", "3", "4" ,"5" ,"6" ,"7" ,"8" ,"9" ,"10" ,"11" ,"12", "13", "14"]
             casos = DatosRegion("Antofagasta")
             colors = ["brown", "green", "red", "blue", "purple", "yellow", "pink", "grey", "brown", "green", "red", "blue", "purple", "yellow"]
@@ -356,6 +355,6 @@ while flag:
             plt.bar(dias, height=casos, color=colors)
             plt.show()
             print("Datos no acumulativos")
-    elif option == "0":
+    elif option == "0": #Ya como la persona presione 0 saldra del programa haciendo que el while sea falso.
         flag = False
 print("Saliendo del programa....")
